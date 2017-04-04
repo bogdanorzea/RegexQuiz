@@ -24,8 +24,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_text_view, parent, false);
 
         // Set layout_margins for View
-        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-        mlp.setMargins(20, 20, 20, 20);
+        //ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+        //mlp.setMargins(20, 20, 20, 20);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
