@@ -1,16 +1,20 @@
 package com.bogdanorzea.regexquiz;
 
-public class Question {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+class Question {
+
     // Title of the question
     private String mTitle;
     // The body of the question
     private String mDescription;
     // Array of strings used by RadioButtons
-    private String[] mSingleChoices;
+    private String[] mAvailableChoices;
     // Array of strings used by CheckBoxButtons
-    private String[] mMultipleChoices;
     // Correct answer (multiple correct values in case of the multiple choice questions)
-    private String[] mAnswers;
+    private List<String> mAnswers;
 
     // Generic private constructor that handles title and description
     private Question(String title, String description) {
@@ -25,9 +29,10 @@ public class Question {
      * @param description Body of the question
      * @param answer      Correct answer
      */
-    public Question(String title, String description, String answer) {
+    Question(String title, String description, String answer) {
         this(title, description);
-        mAnswers = new String[]{answer};
+        mAnswers = new ArrayList<>();
+        mAnswers.add(answer);
     }
 
     /**
@@ -35,12 +40,12 @@ public class Question {
      *
      * @param title         Title of the question
      * @param description   Body of the question
-     * @param singleChoices Array of possibles choices
+     * @param choices Array of possibles choices
      * @param answer        Correct answer
      */
-    public Question(String title, String description, String[] singleChoices, String answer) {
+    Question(String title, String description, String[] choices, String answer) {
         this(title, description, answer);
-        mSingleChoices = singleChoices.clone();
+        mAvailableChoices = choices.clone();
     }
 
     /**
@@ -48,32 +53,28 @@ public class Question {
      *
      * @param title           Title of the question
      * @param description     Body of the question
-     * @param multipleChoices Array of possibles choices
+     * @param choices Array of possibles choices
      * @param answers         Array of correct answers
      */
-    public Question(String title, String description, String[] multipleChoices, String[] answers) {
+    Question(String title, String description, String[] choices, String[] answers) {
         this(title, description);
-        mMultipleChoices = multipleChoices.clone();
-        mAnswers = answers.clone();
+        mAvailableChoices = choices.clone();
+        mAnswers = new ArrayList<>(Arrays.asList(answers));
     }
 
-    public String getTitle() {
+    String getTitle() {
         return mTitle;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return mDescription;
     }
 
-    public String[] getSingleChoices() {
-        return mSingleChoices;
+    String[] getAvailableChoices() {
+        return mAvailableChoices;
     }
 
-    public String[] getMultipleChoices() {
-        return mMultipleChoices;
-    }
-
-    public String[] getAnswers() {
+    List<String> getAnswers() {
         return mAnswers;
     }
 }

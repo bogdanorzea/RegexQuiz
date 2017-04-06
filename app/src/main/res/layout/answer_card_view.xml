@@ -48,7 +48,7 @@
             android:hint="@string/answer_hint"
             android:inputType="text"
             android:maxLines="1"
-            android:selectAllOnFocus="true"/>
+            android:selectAllOnFocus="true" />
 
         <!-- SINGLE SELECTION -->
         <RadioGroup
@@ -58,7 +58,7 @@
 
             <RadioButton
                 android:id="@+id/radioButton1"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="OPTION1"
@@ -66,7 +66,7 @@
 
             <RadioButton
                 android:id="@+id/radioButton2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="OPTION2"
@@ -74,7 +74,7 @@
 
             <RadioButton
                 android:id="@+id/radioButton3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="OPTION3"
@@ -82,7 +82,7 @@
 
             <RadioButton
                 android:id="@+id/radioButton4"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="OPTION4"
@@ -98,28 +98,28 @@
 
             <CheckBox
                 android:id="@+id/checkBox1"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CheckBox1"
                 tools:ignore="HardcodedText" />
 
             <CheckBox
                 android:id="@+id/checkBox2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CheckBox2"
                 tools:ignore="HardcodedText" />
 
             <CheckBox
                 android:id="@+id/checkBox3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CheckBox3"
                 tools:ignore="HardcodedText" />
 
             <CheckBox
                 android:id="@+id/checkBox4"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CheckBox4"
                 tools:ignore="HardcodedText" />

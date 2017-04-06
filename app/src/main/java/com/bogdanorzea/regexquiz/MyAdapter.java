@@ -5,21 +5,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.List;
 
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
+    public static final String REGEXQUIZ = "REGEXQUIZ";
     private List<Question> mDataset;
 
-    public MyAdapter(List<Question> myDataset) {
+    MyAdapter(List<Question> myDataset) {
         mDataset = myDataset;
     }
 
@@ -27,47 +25,116 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.answer_card_view, parent, false);
-
         return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Question tempQuestion = mDataset.get(position);
-        final String text = tempQuestion.getTitle();
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Question tempQuestion = mDataset.get(position);
 
         holder.mTitle.setText(tempQuestion.getTitle());
         holder.mDescription.setText(tempQuestion.getDescription());
 
         // Hide unnecessary elements
-        if (tempQuestion.getSingleChoices() != null) {
-            holder.mInput.setVisibility(View.GONE);
-
-            holder.mRButton1.setText(tempQuestion.getSingleChoices()[0]);
-            holder.mRButton2.setText(tempQuestion.getSingleChoices()[1]);
-            holder.mRButton3.setText(tempQuestion.getSingleChoices()[2]);
-            holder.mRButton4.setText(tempQuestion.getSingleChoices()[3]);
-
-            holder.mMultipleChoiceLayout.setVisibility(View.GONE);
-        } else if(tempQuestion.getMultipleChoices() != null) {
-            holder.mInput.setVisibility(View.GONE);
-
+        if (tempQuestion.getAvailableChoices() == null) {
             holder.mSingleChoiceLayout.setVisibility(View.GONE);
-
-            holder.mCBox1.setText(tempQuestion.getMultipleChoices()[0]);
-            holder.mCBox2.setText(tempQuestion.getMultipleChoices()[1]);
-            holder.mCBox3.setText(tempQuestion.getMultipleChoices()[2]);
-            holder.mCBox4.setText(tempQuestion.getMultipleChoices()[3]);
+            holder.mMultipleChoiceLayout.setVisibility(View.GONE);
         } else {
-            holder.mSingleChoiceLayout.setVisibility(View.GONE);
-            holder.mMultipleChoiceLayout.setVisibility(View.GONE);
+            String[] tc = tempQuestion.getAvailableChoices();
+
+            if (tempQuestion.getAnswers().size() == 1) {
+                holder.mInput.setVisibility(View.GONE);
+
+                holder.mRButton1.setText(tc[0]);
+                holder.mRButton2.setText(tc[1]);
+                holder.mRButton3.setText(tc[2]);
+                holder.mRButton4.setText(tc[3]);
+                holder.mRButton1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onRadioButtonClick(v, holder);
+                    }
+                });
+                holder.mRButton2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onRadioButtonClick(v, holder);
+                    }
+                });
+                holder.mRButton3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onRadioButtonClick(v, holder);
+                    }
+                });
+                holder.mRButton4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onRadioButtonClick(v, holder);
+                    }
+                });
+
+                holder.mMultipleChoiceLayout.setVisibility(View.GONE);
+            } else {
+                holder.mInput.setVisibility(View.GONE);
+
+                holder.mSingleChoiceLayout.setVisibility(View.GONE);
+
+                holder.mCBox1.setText(tc[0]);
+                holder.mCBox2.setText(tc[1]);
+                holder.mCBox3.setText(tc[2]);
+                holder.mCBox4.setText(tc[3]);
+                holder.mCBox1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCheckBoxClick(v, holder);
+                    }
+                });
+                holder.mCBox2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCheckBoxClick(v, holder);
+                    }
+                });
+                holder.mCBox3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCheckBoxClick(v, holder);
+                    }
+                });
+                holder.mCBox4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCheckBoxClick(v, holder);
+                    }
+                });
+            }
         }
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("LOCATION", "Created from: " + text);
+                if (tempQuestion.getAvailableChoices() == null) {
+                    holder.mUserChoice.clear();
+                    holder.mUserChoice.add(holder.mInput.getText().toString());
+                }
+
+                Log.i(REGEXQUIZ, "Final answer for " + holder.mTitle.getText().toString() + " is \"" + holder.mUserChoice + "\"");
+
+                if (tempQuestion.getAnswers().size() != holder.mUserChoice.size()) {
+                    Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
+                } else {
+                    List<String> a = tempQuestion.getAnswers();
+                    List<String> b = holder.mUserChoice;
+                    Collections.sort(a);
+                    Collections.sort(b);
+                    if (a.equals(b)) {
+                        Toast.makeText(view.getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
@@ -78,35 +145,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return mDataset.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTitle, mDescription;
-        public EditText mInput;
-        public RadioGroup mSingleChoiceLayout;
-        public RadioButton mRButton1, mRButton2, mRButton3, mRButton4;
-        public LinearLayout mMultipleChoiceLayout;
-        public CheckBox mCBox1, mCBox2, mCBox3, mCBox4;
 
-        public Button mButton;
-
-        public ViewHolder(View v) {
-            super(v);
-            mTitle = (TextView) v.findViewById(R.id.title);
-            mDescription = (TextView) v.findViewById(R.id.description);
-            mInput = (EditText) v.findViewById(R.id.inputText);
-
-            mSingleChoiceLayout = (RadioGroup) v.findViewById(R.id.radioGroup);
-            mRButton1 = (RadioButton) v.findViewById(R.id.radioButton1);
-            mRButton2 = (RadioButton) v.findViewById(R.id.radioButton2);
-            mRButton3 = (RadioButton) v.findViewById(R.id.radioButton3);
-            mRButton4 = (RadioButton) v.findViewById(R.id.radioButton4);
-
-            mMultipleChoiceLayout = (LinearLayout) v.findViewById(R.id.multiple_choice_layout);
-            mCBox1 = (CheckBox) v.findViewById(R.id.checkBox1);
-            mCBox2 = (CheckBox) v.findViewById(R.id.checkBox2);
-            mCBox3 = (CheckBox) v.findViewById(R.id.checkBox3);
-            mCBox4 = (CheckBox) v.findViewById(R.id.checkBox4);
-
-            mButton = (Button) v.findViewById(R.id.button);
+    void onRadioButtonClick(View v, ViewHolder holder) {
+        boolean checked = ((RadioButton) v).isChecked();
+        if (checked) {
+            holder.mUserChoice.clear();
+            holder.mUserChoice.add(((RadioButton) v).getText().toString());
+            Log.i(REGEXQUIZ, "User clicked on: " + holder.mUserChoice);
         }
+    }
+
+    void onCheckBoxClick(View v, ViewHolder holder) {
+        boolean checked = ((CheckBox) v).isChecked();
+        if (checked) {
+            holder.mUserChoice.add(((CheckBox) v).getText().toString());
+        } else {
+            holder.mUserChoice.remove(((CheckBox) v).getText().toString());
+        }
+
+        Log.i(REGEXQUIZ, "User clicked on: " + holder.mUserChoice);
     }
 }

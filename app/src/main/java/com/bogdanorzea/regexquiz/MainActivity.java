@@ -28,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         List<Question> qList = new ArrayList<>();
 
-        Question temp = new Question("Question 1", "Input type question", "A");
+        Question temp = new Question("Question 1", "What is the character to match any single character?", ".");
         qList.add(temp);
         temp = new Question("Question 2", "What does \"regex\" shorthand stand for?", new String[]{"Regional Expression", "Regular Expression", "Regal Experience", "Regular Exercise"}, "Regular Expression");
         qList.add(temp);
-        temp = new Question("Question 3", "Multiple type question", new String[]{"A", "B", "C", "D"}, new String[]{"A", "B"});
+        temp = new Question("Question 3", "Which of the following will match a single digit number?", new String[]{"\\D", "[0-9]", "\\n", "\\d"}, new String[]{"[0-9]", "\\d"});
+        qList.add(temp);
+        temp = new Question("Question 4", "What is the syntax to capture groups?", new String[]{"(?: ...  )", "(?= ...  )", "[?: ...  ]", "(?== ...  )"}, "(?: ...  )");
         qList.add(temp);
 
         mAdapter = new MyAdapter(qList);
