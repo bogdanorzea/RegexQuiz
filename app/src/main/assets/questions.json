@@ -1,0 +1,22 @@
+{
+  "questions": [
+    {
+      "title": "Question 1",
+      "description": "What does \"regex\" shorthand stand for?",
+      "single_choices": [
+        [
+          "Regional Expressions",
+          "Regular Expressions",
+          "Regal Experience",
+          "Regular Exercise"
+        ]
+      ],
+      "multiple_choices": [
+        {}
+      ],
+      "answers": [
+        "Regular Expressions"
+      ]
+    }
+  ]
+}
