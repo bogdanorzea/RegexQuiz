@@ -10,9 +10,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 class ViewHolder extends RecyclerView.ViewHolder {
     TextView mTitle, mDescription;
     EditText mInput;
@@ -21,8 +18,6 @@ class ViewHolder extends RecyclerView.ViewHolder {
     LinearLayout mMultipleChoiceLayout;
     CheckBox mCBox1, mCBox2, mCBox3, mCBox4;
     Button mButton;
-
-    List<String> mUserChoice = new ArrayList<>();
 
     ViewHolder(View v) {
         super(v);

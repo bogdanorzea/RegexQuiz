@@ -2,24 +2,31 @@ package com.bogdanorzea.regexquiz;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class Question {
 
     // Title of the question
     private String mTitle;
+
     // The body of the question
     private String mDescription;
-    // Array of strings used by RadioButtons
+
+    // Array of choices
     private String[] mAvailableChoices;
-    // Array of strings used by CheckBoxButtons
+
     // Correct answer (multiple correct values in case of the multiple choice questions)
     private List<String> mAnswers;
+
+    // Choices made by user
+    private List<String> mUserChoice;
 
     // Generic private constructor that handles title and description
     private Question(String title, String description) {
         mTitle = title;
         mDescription = description;
+        mUserChoice = new ArrayList<>();
     }
 
     /**
@@ -38,10 +45,10 @@ class Question {
     /**
      * Creates a single option question
      *
-     * @param title         Title of the question
-     * @param description   Body of the question
-     * @param choices Array of possibles choices
-     * @param answer        Correct answer
+     * @param title       Title of the question
+     * @param description Body of the question
+     * @param choices     Array of possibles choices
+     * @param answer      Correct answer
      */
     Question(String title, String description, String[] choices, String answer) {
         this(title, description, answer);
@@ -51,15 +58,24 @@ class Question {
     /**
      * Creates a multiple option question
      *
-     * @param title           Title of the question
-     * @param description     Body of the question
-     * @param choices Array of possibles choices
-     * @param answers         Array of correct answers
+     * @param title       Title of the question
+     * @param description Body of the question
+     * @param choices     Array of possibles choices
+     * @param answers     Array of correct answers
      */
     Question(String title, String description, String[] choices, String[] answers) {
         this(title, description);
         mAvailableChoices = choices.clone();
         mAnswers = new ArrayList<>(Arrays.asList(answers));
+    }
+
+    public void addExclusiveUserChoice(String option) {
+        mUserChoice.clear();
+        mUserChoice.add(option);
+    }
+
+    public boolean hasSufficientChoices() {
+        return (mAnswers.size() == mUserChoice.size());
     }
 
     String getTitle() {
@@ -76,6 +92,30 @@ class Question {
 
     List<String> getAnswers() {
         return mAnswers;
+    }
+
+    public List<String> getUserChoices() {
+        return mUserChoice;
+    }
+
+    public boolean isCorrectlyAnswered() {
+        List<String> a = mAnswers;
+        List<String> b = mUserChoice;
+        Collections.sort(a);
+        Collections.sort(b);
+        return a.equals(b);
+    }
+
+    public void addUserChoice(String s) {
+        if (!mUserChoice.contains(s)) {
+            mUserChoice.add(s);
+        }
+    }
+
+    public void removeUserChoice(String s) {
+        if (mUserChoice.contains(s)) {
+            mUserChoice.remove(s);
+        }
     }
 }
 

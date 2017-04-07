@@ -9,11 +9,11 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.List;
 
 
-class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
+class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable {
     public static final String REGEXQUIZ = "REGEXQUIZ";
     private List<Question> mDataset;
 
@@ -53,25 +53,25 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
                 holder.mRButton1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onRadioButtonClick(v, holder);
+                        onRadioButtonClick(v, tempQuestion);
                     }
                 });
                 holder.mRButton2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onRadioButtonClick(v, holder);
+                        onRadioButtonClick(v, tempQuestion);
                     }
                 });
                 holder.mRButton3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onRadioButtonClick(v, holder);
+                        onRadioButtonClick(v, tempQuestion);
                     }
                 });
                 holder.mRButton4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onRadioButtonClick(v, holder);
+                        onRadioButtonClick(v, tempQuestion);
                     }
                 });
 
@@ -88,25 +88,25 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
                 holder.mCBox1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onCheckBoxClick(v, holder);
+                        onCheckBoxClick(v, tempQuestion);
                     }
                 });
                 holder.mCBox2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onCheckBoxClick(v, holder);
+                        onCheckBoxClick(v, tempQuestion);
                     }
                 });
                 holder.mCBox3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onCheckBoxClick(v, holder);
+                        onCheckBoxClick(v, tempQuestion);
                     }
                 });
                 holder.mCBox4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onCheckBoxClick(v, holder);
+                        onCheckBoxClick(v, tempQuestion);
                     }
                 });
             }
@@ -115,54 +115,50 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tempQuestion.getAvailableChoices() == null) {
-                    holder.mUserChoice.clear();
-                    holder.mUserChoice.add(holder.mInput.getText().toString());
-                }
-
-                Log.i(REGEXQUIZ, "Final answer for " + holder.mTitle.getText().toString() + " is \"" + holder.mUserChoice + "\"");
-
-                if (tempQuestion.getAnswers().size() != holder.mUserChoice.size()) {
-                    Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
-                } else {
-                    List<String> a = tempQuestion.getAnswers();
-                    List<String> b = holder.mUserChoice;
-                    Collections.sort(a);
-                    Collections.sort(b);
-                    if (a.equals(b)) {
-                        Toast.makeText(view.getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                onSubmitButtonClick(view, tempQuestion, holder);
             }
         });
+    }
+
+    private void onSubmitButtonClick(View view, Question tempQuestion, ViewHolder holder) {
+        if (tempQuestion.getAvailableChoices() == null) {
+            tempQuestion.addExclusiveUserChoice(holder.mInput.getText().toString());
+        }
+
+        Log.d(REGEXQUIZ, "Final answer for " + tempQuestion.getTitle() + " is: " + tempQuestion.getUserChoices() + "\"");
+
+        if (tempQuestion.hasSufficientChoices()) {
+            Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
+        } else {
+            if (tempQuestion.isCorrectlyAnswered()) {
+                Toast.makeText(view.getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void onRadioButtonClick(View v, Question tempQuestion) {
+        boolean checked = ((RadioButton) v).isChecked();
+        if (checked) {
+            tempQuestion.addExclusiveUserChoice(((RadioButton) v).getText().toString());
+            Log.d(REGEXQUIZ, "User clicked on: " + tempQuestion.getUserChoices());
+        }
+    }
+
+    private void onCheckBoxClick(View v, Question tempQuestion) {
+        boolean checked = ((CheckBox) v).isChecked();
+        if (checked) {
+            tempQuestion.addUserChoice(((CheckBox) v).getText().toString());
+        } else {
+            tempQuestion.removeUserChoice(((CheckBox) v).getText().toString());
+        }
+        Log.d(REGEXQUIZ, "User clicked on: " + tempQuestion.getUserChoices());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataset.size();
-    }
-
-
-    void onRadioButtonClick(View v, ViewHolder holder) {
-        boolean checked = ((RadioButton) v).isChecked();
-        if (checked) {
-            holder.mUserChoice.clear();
-            holder.mUserChoice.add(((RadioButton) v).getText().toString());
-            Log.i(REGEXQUIZ, "User clicked on: " + holder.mUserChoice);
-        }
-    }
-
-    void onCheckBoxClick(View v, ViewHolder holder) {
-        boolean checked = ((CheckBox) v).isChecked();
-        if (checked) {
-            holder.mUserChoice.add(((CheckBox) v).getText().toString());
-        } else {
-            holder.mUserChoice.remove(((CheckBox) v).getText().toString());
-        }
-
-        Log.i(REGEXQUIZ, "User clicked on: " + holder.mUserChoice);
     }
 }

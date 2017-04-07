@@ -1,16 +1,21 @@
 package com.bogdanorzea.regexquiz;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.bogdanorzea.regexquiz.R.layout.activity_main;
 
 public class MainActivity extends AppCompatActivity {
+    private static Bundle mBundleRecyclerViewState;
+    private final String RECYCLERVIEWSTATE = "RECYCLERVIEWSTATE";
+    private final String ADAPTER = "ADAPTER";
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -26,6 +31,15 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        if (savedInstanceState != null) {
+            mAdapter = (RecyclerView.Adapter) savedInstanceState.getSerializable(ADAPTER);
+        } else {
+            mAdapter = new MyAdapter(generateQuestions());
+        }
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private List<Question> generateQuestions() {
         List<Question> qList = new ArrayList<>();
 
         Question temp = new Question("Question 1", "What is the character to match any single character?", ".");
@@ -36,9 +50,35 @@ public class MainActivity extends AppCompatActivity {
         qList.add(temp);
         temp = new Question("Question 4", "What is the syntax to capture groups?", new String[]{"(?: ...  )", "(?= ...  )", "[?: ...  ]", "(?== ...  )"}, "(?: ...  )");
         qList.add(temp);
+        return qList;
+    }
 
-        mAdapter = new MyAdapter(qList);
-        mRecyclerView.setAdapter(mAdapter);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(ADAPTER, (Serializable) mAdapter);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // save RecyclerView state
+        mBundleRecyclerViewState = new Bundle();
+        Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(RECYCLERVIEWSTATE, listState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // restore RecyclerView state
+        if (mBundleRecyclerViewState != null) {
+            Parcelable listState = mBundleRecyclerViewState.getParcelable(RECYCLERVIEWSTATE);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
+        }
     }
 }
 ///http://stacktips.com/tutorials/android/android-recyclerview-example#2-recyclerview-example
