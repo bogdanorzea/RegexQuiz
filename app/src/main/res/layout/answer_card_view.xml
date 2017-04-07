@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/answer_hint"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
             android:selectAllOnFocus="true" />

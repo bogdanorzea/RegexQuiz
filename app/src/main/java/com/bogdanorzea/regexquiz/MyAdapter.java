@@ -1,6 +1,8 @@
 package com.bogdanorzea.regexquiz;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,28 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
 
         // Hide unnecessary elements
         if (tempQuestion.getAvailableChoices() == null) {
+            // Add logic to update user choice as he types the answer
+            holder.mInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    tempQuestion.addExclusiveUserChoice(holder.mInput.getText().toString());
+                }
+            });
+
+            if (!tempQuestion.getUserChoices().isEmpty()) {
+                holder.mInput.setText(tempQuestion.getUserChoices().get(0));
+            }
+
             holder.mSingleChoiceLayout.setVisibility(View.GONE);
             holder.mMultipleChoiceLayout.setVisibility(View.GONE);
         } else {
@@ -50,6 +74,21 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
                 holder.mRButton2.setText(tc[1]);
                 holder.mRButton3.setText(tc[2]);
                 holder.mRButton4.setText(tc[3]);
+
+                // Check the radio buttons if needed
+                if (tempQuestion.hasAsAnswer(tc[0])) {
+                    holder.mRButton1.setChecked(true);
+                }
+                if (tempQuestion.hasAsAnswer(tc[1])) {
+                    holder.mRButton2.setChecked(true);
+                }
+                if (tempQuestion.hasAsAnswer(tc[2])) {
+                    holder.mRButton3.setChecked(true);
+                }
+                if (tempQuestion.hasAsAnswer(tc[3])) {
+                    holder.mRButton4.setChecked(true);
+                }
+
                 holder.mRButton1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -85,6 +124,21 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
                 holder.mCBox2.setText(tc[1]);
                 holder.mCBox3.setText(tc[2]);
                 holder.mCBox4.setText(tc[3]);
+
+                // Check the check buttons if needed
+                if (tempQuestion.hasAsAnswer(tc[0])) {
+                    holder.mCBox1.setChecked(true);
+                }
+                if (tempQuestion.hasAsAnswer(tc[1])) {
+                    holder.mCBox2.setChecked(true);
+                }
+                if (tempQuestion.hasAsAnswer(tc[2])) {
+                    holder.mCBox3.setChecked(true);
+                }
+                if (tempQuestion.hasAsAnswer(tc[3])) {
+                    holder.mCBox4.setChecked(true);
+                }
+
                 holder.mCBox1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -121,10 +175,6 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
     }
 
     private void onSubmitButtonClick(View view, Question tempQuestion, ViewHolder holder) {
-        if (tempQuestion.getAvailableChoices() == null) {
-            tempQuestion.addExclusiveUserChoice(holder.mInput.getText().toString());
-        }
-
         Log.d(REGEXQUIZ, "Final answer for " + tempQuestion.getTitle() + " is: " + tempQuestion.getUserChoices() + "\"");
 
         if (tempQuestion.hasSufficientChoices()) {

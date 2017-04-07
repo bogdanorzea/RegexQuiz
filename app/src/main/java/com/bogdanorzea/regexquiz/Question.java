@@ -117,6 +117,10 @@ class Question {
             mUserChoice.remove(s);
         }
     }
+
+    public boolean hasAsAnswer(String s) {
+        return mUserChoice.contains(s);
+    }
 }
 
 
@@ -128,3 +132,6 @@ class Question {
 //  single_choices[4] = Regional Expressions, Regular Expressions, Regal Experience, Regular Exercise
 //  multiple_choices[4]
 //  answers[] = Regular Expressions
+
+
+
