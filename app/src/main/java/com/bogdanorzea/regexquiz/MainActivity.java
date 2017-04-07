@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        // TODO Add menu to reset the answers
+        // TODO Add menu to share the results :)
+
         if (savedInstanceState != null) {
             mAdapter = (RecyclerView.Adapter) savedInstanceState.getSerializable(ADAPTER);
         } else {
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    // TODO Add more questions
     private List<Question> generateQuestions() {
         List<Question> qList = new ArrayList<>();
 
@@ -82,3 +86,4 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 ///http://stacktips.com/tutorials/android/android-recyclerview-example#2-recyclerview-example
+

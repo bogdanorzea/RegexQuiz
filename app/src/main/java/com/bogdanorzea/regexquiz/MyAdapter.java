@@ -186,6 +186,9 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
                 Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
             }
         }
+
+        // TODO Disable question from being clicked again
+        // TODO Report score
     }
 
     private void onRadioButtonClick(View v, Question tempQuestion) {
