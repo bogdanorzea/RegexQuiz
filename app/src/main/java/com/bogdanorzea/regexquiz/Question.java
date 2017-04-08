@@ -1,11 +1,12 @@
 package com.bogdanorzea.regexquiz;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-class Question {
+class Question implements Serializable {
 
     // Title of the question
     private String mTitle;
@@ -22,11 +23,15 @@ class Question {
     // Choices made by user
     private List<String> mUserChoice;
 
+    // Boolean set to verify if question was answered
+    private boolean hasAnswer;
+
     // Generic private constructor that handles title and description
     private Question(String title, String description) {
         mTitle = title;
         mDescription = description;
         mUserChoice = new ArrayList<>();
+        hasAnswer = false;
     }
 
     /**
@@ -67,6 +72,14 @@ class Question {
         this(title, description);
         mAvailableChoices = choices.clone();
         mAnswers = new ArrayList<>(Arrays.asList(answers));
+    }
+
+    public boolean wasAnswered() {
+        return hasAnswer;
+    }
+
+    public void markAnswered() {
+        this.hasAnswer = true;
     }
 
     public void addExclusiveUserChoice(String option) {

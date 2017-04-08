@@ -172,12 +172,31 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
                 onSubmitButtonClick(view, tempQuestion, holder);
             }
         });
+
+        if (tempQuestion.wasAnswered()) {
+            setEnableHolder(holder, false);
+        }
+    }
+
+    private void setEnableHolder(ViewHolder holder, boolean mode) {
+        holder.mTitle.setEnabled(mode);
+        holder.mDescription.setEnabled(mode);
+        holder.mInput.setEnabled(mode);
+        holder.mRButton1.setEnabled(mode);
+        holder.mRButton2.setEnabled(mode);
+        holder.mRButton3.setEnabled(mode);
+        holder.mRButton4.setEnabled(mode);
+        holder.mCBox1.setEnabled(mode);
+        holder.mCBox2.setEnabled(mode);
+        holder.mCBox3.setEnabled(mode);
+        holder.mCBox4.setEnabled(mode);
+        holder.mButton.setEnabled(mode);
     }
 
     private void onSubmitButtonClick(View view, Question tempQuestion, ViewHolder holder) {
-        Log.d(REGEXQUIZ, "Final answer for " + tempQuestion.getTitle() + " is: " + tempQuestion.getUserChoices() + "\"");
+        Log.d(REGEXQUIZ, "Final answer for " + tempQuestion.getTitle() + " is: " + tempQuestion.getUserChoices());
 
-        if (tempQuestion.hasSufficientChoices()) {
+        if (!tempQuestion.hasSufficientChoices()) {
             Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
         } else {
             if (tempQuestion.isCorrectlyAnswered()) {
@@ -187,7 +206,10 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
             }
         }
 
-        // TODO Disable question from being clicked again
+        // Disables question card from being clicked again
+        tempQuestion.markAnswered();
+        setEnableHolder(holder, false);
+
         // TODO Report score
     }
 
