@@ -29,12 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private static Bundle mBundleRecyclerViewState;
     private final String RECYCLERVIEWSTATE = "RECYCLERVIEWSTATE";
     private final String ADAPTER = "ADAPTER";
-    private ProgressBar progressBar;
     private int progressStatus;
     private int correctAnswers;
-
-    private RecyclerView mRecyclerView;
+    private ProgressBar progressBar;
     private MyAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
