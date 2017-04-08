@@ -50,7 +50,7 @@
     },
     {
       "title": "Question 5",
-      "description": "Which of the below is the best syntax to match e-mail adresses?",
+      "description": "Which of the below is the best syntax to match e-mail addresses?",
       "choices": [
         "[a-z]+@[a-Z]\\.{1}com",
         "\\S+@\\S+\\.\\S+",

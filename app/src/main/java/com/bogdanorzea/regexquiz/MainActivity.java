@@ -27,14 +27,14 @@ import static com.bogdanorzea.regexquiz.R.layout.activity_main;
 
 public class MainActivity extends AppCompatActivity {
     private static final String PROGRESS = "PROGRESS";
-    private static final String CORRECTANSWERS = "CORRECTANSWERS";
+    private static final String CORRECT_ANSWERS = "CORRECT_ANSWERS";
     private static Bundle mBundleRecyclerViewState;
-    private final String RECYCLERVIEWSTATE = "RECYCLERVIEWSTATE";
+    private final String RECYCLER_VIEW_STATE = "RECYCLER_VIEW_STATE";
     private final String ADAPTER = "ADAPTER";
     private int progressStatus;
     private int correctAnswers;
     private ProgressBar progressBar;
-    private MyAdapter mAdapter;
+    private QuestionAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -51,28 +51,34 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             progressStatus = savedInstanceState.getInt(PROGRESS);
-            correctAnswers = savedInstanceState.getInt(CORRECTANSWERS);
-            mAdapter = (MyAdapter) savedInstanceState.getSerializable(ADAPTER);
+            correctAnswers = savedInstanceState.getInt(CORRECT_ANSWERS);
+            mAdapter = (QuestionAdapter) savedInstanceState.getSerializable(ADAPTER);
         } else {
             reinitializeProgress();
         }
         setAdapter();
     }
 
+    /**
+     * Sets the initial values for the quiz
+     */
     private void reinitializeProgress() {
         progressStatus = 0;
         correctAnswers = 0;
-        mAdapter = new MyAdapter(generateQuestions());
+        mAdapter = new QuestionAdapter(generateQuestions());
     }
 
+    /**
+     * Sets the Adapter for the RecyclerView
+     */
     private void setAdapter() {
         if (mAdapter != null) {
             progressBar.setMax(mAdapter.getItemCount());
             progressBar.setProgress(progressStatus);
             mRecyclerView.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            mAdapter.setOnCheckClickListener(new OnCheckClickListener() {
                 @Override
-                public void onItemClick(Question q) {
+                public void onCheckClick(Question q) {
                     progressStatus += 1;
                     if (q.isCorrectlyAnswered()) {
                         correctAnswers += 1;
@@ -101,6 +107,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function generates the Question objects by parsing an JSON file
+     *
+     * @return List of Question object
+     */
     private List<Question> generateQuestions() {
         // JSON Node names
         String TAG_QUESTIONS = "questions";
@@ -174,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(ADAPTER, mAdapter);
         outState.putInt(PROGRESS, progressStatus);
-        outState.putInt(CORRECTANSWERS, correctAnswers);
+        outState.putInt(CORRECT_ANSWERS, correctAnswers);
 
         super.onSaveInstanceState(outState);
     }
@@ -186,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         // save RecyclerView state
         mBundleRecyclerViewState = new Bundle();
         Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-        mBundleRecyclerViewState.putParcelable(RECYCLERVIEWSTATE, listState);
+        mBundleRecyclerViewState.putParcelable(RECYCLER_VIEW_STATE, listState);
     }
 
     @Override
@@ -195,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         // restore RecyclerView state
         if (mBundleRecyclerViewState != null) {
-            Parcelable listState = mBundleRecyclerViewState.getParcelable(RECYCLERVIEWSTATE);
+            Parcelable listState = mBundleRecyclerViewState.getParcelable(RECYCLER_VIEW_STATE);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
         }
     }

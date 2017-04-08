@@ -78,6 +78,9 @@ class Question implements Serializable {
         return hasAnswer;
     }
 
+    /**
+     * Marks the question as answered
+     */
     public void markAnswered() {
         this.hasAnswer = true;
     }
@@ -136,22 +139,6 @@ class Question implements Serializable {
     }
 
     public boolean hasChoices() {
-        if (mUserChoice.size() == 0) {
-            return false;
-        }
-        return true;
+        return mUserChoice.size() != 0;
     }
 }
-
-
-//JSON format: http://www.objgen.com/
-//
-//questions[]
-//  title = Question 1
-//  description = What does "regex" shorthand stand for?
-//  single_choices[4] = Regional Expressions, Regular Expressions, Regal Experience, Regular Exercise
-//  multiple_choices[4]
-//  answers[] = Regular Expressions
-
-
-

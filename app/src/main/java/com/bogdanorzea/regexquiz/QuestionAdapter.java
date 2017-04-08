@@ -14,14 +14,13 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.List;
 
+class QuestionAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable {
+    private static final String QUESTION_ADAPTER = "QUESTION_ADAPTER";
+    private List<Question> mQuestionList;
+    private transient OnCheckClickListener onCheckClickListener;
 
-class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable {
-    private static final String REGEXQUIZ = "REGEXQUIZ";
-    private List<Question> mDataset;
-    private transient OnItemClickListener onItemClickListener;
-
-    MyAdapter(List<Question> myDataset) {
-        mDataset = myDataset;
+    QuestionAdapter(List<Question> qList) {
+        mQuestionList = qList;
     }
 
     // Create new views (invoked by the layout manager)
@@ -34,7 +33,7 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Question tempQuestion = mDataset.get(position);
+        final Question tempQuestion = mQuestionList.get(position);
 
         holder.mTitle.setText(tempQuestion.getTitle());
         holder.mDescription.setText(tempQuestion.getDescription());
@@ -215,7 +214,7 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
     }
 
     private void onSubmitButtonClick(View view, Question tempQuestion, ViewHolder holder) {
-        Log.d(REGEXQUIZ, "Final answer for " + tempQuestion.getTitle() + " is: " + tempQuestion.getUserChoices());
+        Log.d(QUESTION_ADAPTER, String.format("Final answer for %s is: %s.", tempQuestion.getTitle(), tempQuestion.getUserChoices()));
 
         if (!tempQuestion.hasChoices()) {
             Toast.makeText(view.getContext(), "Please make at least a choice!", Toast.LENGTH_SHORT).show();
@@ -235,14 +234,14 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
         tempQuestion.markAnswered();
         setEnableHolder(holder, false);
 
-        onItemClickListener.onItemClick(tempQuestion);
+        onCheckClickListener.onCheckClick(tempQuestion);
     }
 
     private void onRadioButtonClick(View v, Question tempQuestion) {
         boolean checked = ((RadioButton) v).isChecked();
         if (checked) {
             tempQuestion.addExclusiveUserChoice(((RadioButton) v).getText().toString());
-            Log.d(REGEXQUIZ, "User clicked on: " + tempQuestion.getUserChoices());
+            Log.d(QUESTION_ADAPTER, String.format("User clicked on: %s.", tempQuestion.getUserChoices()));
         }
     }
 
@@ -253,20 +252,20 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
         } else {
             tempQuestion.removeUserChoice(((CheckBox) v).getText().toString());
         }
-        Log.d(REGEXQUIZ, "User clicked on: " + tempQuestion.getUserChoices());
+        Log.d(QUESTION_ADAPTER, String.format("User clicked on: %s.", tempQuestion.getUserChoices()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mQuestionList.size();
     }
 
-    public OnItemClickListener getOnItemClickListener() {
-        return onItemClickListener;
+    public OnCheckClickListener getOnCheckClickListener() {
+        return onCheckClickListener;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setOnCheckClickListener(OnCheckClickListener onCheckClickListener) {
+        this.onCheckClickListener = onCheckClickListener;
     }
 }
