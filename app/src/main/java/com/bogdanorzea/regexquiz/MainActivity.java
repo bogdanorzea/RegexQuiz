@@ -1,11 +1,14 @@
 package com.bogdanorzea.regexquiz;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,19 +18,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.bogdanorzea.regexquiz.R.layout.activity_main;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String PROGRESS = "PROGRESS";
+    private static final String CORRECTANSWERS = "CORRECTANSWERS";
     private static Bundle mBundleRecyclerViewState;
     private final String RECYCLERVIEWSTATE = "RECYCLERVIEWSTATE";
     private final String ADAPTER = "ADAPTER";
+    private ProgressBar progressBar;
+    private int progressStatus;
+    private int correctAnswers;
+
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private MyAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +45,55 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemViewCacheSize(10);
 
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // TODO Add menu to reset the answers
         // TODO Add menu to share the results :)
 
         if (savedInstanceState != null) {
-            mAdapter = (RecyclerView.Adapter) savedInstanceState.getSerializable(ADAPTER);
+            progressStatus = savedInstanceState.getInt(PROGRESS);
+            mAdapter = (MyAdapter) savedInstanceState.getSerializable(ADAPTER);
         } else {
+            progressStatus = 0;
+            correctAnswers = 0;
             mAdapter = new MyAdapter(generateQuestions());
         }
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setProgress(progressStatus);
+
         if (mAdapter != null) {
+            progressBar.setMax(mAdapter.getItemCount());
             mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(Question q) {
+                    progressStatus += 1;
+                    if (q.isCorrectlyAnswered()) {
+                        correctAnswers += 1;
+                    }
+                    progressBar.setProgress(progressBar.getProgress() + 1);
+
+                    if (progressStatus == mAdapter.getItemCount()) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                        builder.setTitle("Congratulations!");
+                        builder.setMessage(String.format("You scored %d out of %d question.", correctAnswers, progressStatus));
+
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+                    }
+                }
+            });
         }
     }
 
@@ -125,7 +168,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ADAPTER, (Serializable) mAdapter);
+        outState.putSerializable(ADAPTER, mAdapter);
+        outState.putInt(PROGRESS, progressStatus);
+        outState.putInt(CORRECTANSWERS, correctAnswers);
 
         super.onSaveInstanceState(outState);
     }
@@ -151,5 +196,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-///http://stacktips.com/tutorials/android/android-recyclerview-example#2-recyclerview-example
-

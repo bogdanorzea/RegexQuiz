@@ -16,8 +16,9 @@ import java.util.List;
 
 
 class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable {
-    public static final String REGEXQUIZ = "REGEXQUIZ";
+    private static final String REGEXQUIZ = "REGEXQUIZ";
     private List<Question> mDataset;
+    private OnItemClickListener onItemClickListener;
 
     MyAdapter(List<Question> myDataset) {
         mDataset = myDataset;
@@ -234,7 +235,7 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
         tempQuestion.markAnswered();
         setEnableHolder(holder, false);
 
-        // TODO Report score
+        onItemClickListener.onItemClick(tempQuestion);
     }
 
     private void onRadioButtonClick(View v, Question tempQuestion) {
@@ -259,5 +260,13 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public OnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

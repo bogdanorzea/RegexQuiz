@@ -39,13 +39,13 @@
       "title": "Question 4",
       "description": "What is the syntax to capture groups?",
       "choices": [
-        "( ...  )",
-        "(?= ...  )",
-        "[?: ...  ]",
-        "(?== ...  )"
+        "( ... )",
+        "(?= ... )",
+        "[?: ... ]",
+        "(?== ... )"
       ],
       "answers": [
-        "( ...  )"
+        "( ... )"
       ]
     },
     {
