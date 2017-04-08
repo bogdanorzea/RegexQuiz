@@ -18,7 +18,7 @@ import java.util.List;
 class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable {
     private static final String REGEXQUIZ = "REGEXQUIZ";
     private List<Question> mDataset;
-    private OnItemClickListener onItemClickListener;
+    private transient OnItemClickListener onItemClickListener;
 
     MyAdapter(List<Question> myDataset) {
         mDataset = myDataset;
