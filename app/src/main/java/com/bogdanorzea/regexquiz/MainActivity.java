@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 import org.json.JSONArray;
@@ -40,29 +42,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_main);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemViewCacheSize(10);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // TODO Add menu to reset the answers
-        // TODO Add menu to share the results :)
-
         if (savedInstanceState != null) {
             progressStatus = savedInstanceState.getInt(PROGRESS);
+            correctAnswers = savedInstanceState.getInt(CORRECTANSWERS);
             mAdapter = (MyAdapter) savedInstanceState.getSerializable(ADAPTER);
         } else {
-            progressStatus = 0;
-            correctAnswers = 0;
-            mAdapter = new MyAdapter(generateQuestions());
+            reinitializeProgress();
         }
+        setAdapter();
+    }
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setProgress(progressStatus);
+    private void reinitializeProgress() {
+        progressStatus = 0;
+        correctAnswers = 0;
+        mAdapter = new MyAdapter(generateQuestions());
+    }
 
+    private void setAdapter() {
         if (mAdapter != null) {
             progressBar.setMax(mAdapter.getItemCount());
+            progressBar.setProgress(progressStatus);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -89,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
                         AlertDialog alert = builder.create();
                         alert.show();
-
                     }
                 }
             });
@@ -193,5 +198,48 @@ public class MainActivity extends AppCompatActivity {
             Parcelable listState = mBundleRecyclerViewState.getParcelable(RECYCLERVIEWSTATE);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_reset) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+            builder.setTitle("Confirm");
+            builder.setMessage("Are you sure you want to reset progress?");
+
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    reinitializeProgress();
+                    setAdapter();
+                    mAdapter.notifyDataSetChanged();
+
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
