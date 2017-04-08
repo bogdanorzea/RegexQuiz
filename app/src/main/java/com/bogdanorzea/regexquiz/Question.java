@@ -134,6 +134,13 @@ class Question implements Serializable {
     public boolean hasAsAnswer(String s) {
         return mUserChoice.contains(s);
     }
+
+    public boolean hasChoices() {
+        if (mUserChoice.size() == 0) {
+            return false;
+        }
+        return true;
+    }
 }
 
 

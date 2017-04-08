@@ -39,8 +39,9 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
         holder.mDescription.setText(tempQuestion.getDescription());
 
         // Hide unnecessary elements
-        if (tempQuestion.getAvailableChoices() == null) {
+        if (tempQuestion.getAvailableChoices() == null || tempQuestion.getAvailableChoices().length == 0) {
             // Add logic to update user choice as he types the answer
+            holder.mInput.setVisibility(View.VISIBLE);
             holder.mInput.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -69,6 +70,7 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
 
             if (tempQuestion.getAnswers().size() == 1) {
                 holder.mInput.setVisibility(View.GONE);
+                holder.mSingleChoiceLayout.setVisibility(View.VISIBLE);
 
                 holder.mRButton1.setText(tc[0]);
                 holder.mRButton2.setText(tc[1]);
@@ -78,15 +80,23 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
                 // Check the radio buttons if needed
                 if (tempQuestion.hasAsAnswer(tc[0])) {
                     holder.mRButton1.setChecked(true);
+                } else {
+                    holder.mRButton1.setChecked(false);
                 }
                 if (tempQuestion.hasAsAnswer(tc[1])) {
                     holder.mRButton2.setChecked(true);
+                } else {
+                    holder.mRButton2.setChecked(false);
                 }
                 if (tempQuestion.hasAsAnswer(tc[2])) {
                     holder.mRButton3.setChecked(true);
+                } else {
+                    holder.mRButton3.setChecked(false);
                 }
                 if (tempQuestion.hasAsAnswer(tc[3])) {
                     holder.mRButton4.setChecked(true);
+                } else {
+                    holder.mRButton4.setChecked(false);
                 }
 
                 holder.mRButton1.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +130,8 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
 
                 holder.mSingleChoiceLayout.setVisibility(View.GONE);
 
+                holder.mMultipleChoiceLayout.setVisibility(View.VISIBLE);
+
                 holder.mCBox1.setText(tc[0]);
                 holder.mCBox2.setText(tc[1]);
                 holder.mCBox3.setText(tc[2]);
@@ -128,15 +140,23 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
                 // Check the check buttons if needed
                 if (tempQuestion.hasAsAnswer(tc[0])) {
                     holder.mCBox1.setChecked(true);
+                } else {
+                    holder.mCBox1.setChecked(false);
                 }
                 if (tempQuestion.hasAsAnswer(tc[1])) {
                     holder.mCBox2.setChecked(true);
+                } else {
+                    holder.mCBox2.setChecked(false);
                 }
                 if (tempQuestion.hasAsAnswer(tc[2])) {
                     holder.mCBox3.setChecked(true);
+                } else {
+                    holder.mCBox3.setChecked(false);
                 }
                 if (tempQuestion.hasAsAnswer(tc[3])) {
                     holder.mCBox4.setChecked(true);
+                } else {
+                    holder.mCBox4.setChecked(false);
                 }
 
                 holder.mCBox1.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +216,10 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> implements Serializable
     private void onSubmitButtonClick(View view, Question tempQuestion, ViewHolder holder) {
         Log.d(REGEXQUIZ, "Final answer for " + tempQuestion.getTitle() + " is: " + tempQuestion.getUserChoices());
 
+        if (!tempQuestion.hasChoices()) {
+            Toast.makeText(view.getContext(), "Please make at least a choice!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (!tempQuestion.hasSufficientChoices()) {
             Toast.makeText(view.getContext(), "Wrong answer!", Toast.LENGTH_SHORT).show();
         } else {

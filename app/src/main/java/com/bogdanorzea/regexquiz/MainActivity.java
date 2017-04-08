@@ -5,7 +5,16 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemViewCacheSize(10);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -39,21 +49,77 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mAdapter = new MyAdapter(generateQuestions());
         }
-        mRecyclerView.setAdapter(mAdapter);
+        if (mAdapter != null) {
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
-    // TODO Add more questions
     private List<Question> generateQuestions() {
+        // JSON Node names
+        String TAG_QUESTIONS = "questions";
+        String TAG_TITLE = "title";
+        String TAG_DESCRIPTION = "description";
+        String TAG_CHOICES = "choices";
+        String TAG_ANSWERS = "answers";
+
+        // Read JSON file
+        StringBuilder jsonString = new StringBuilder();
+        BufferedReader in = null;
+        try {
+            InputStream json = getAssets().open("questions.json");
+            in = new BufferedReader(new InputStreamReader(json, "UTF-8"));
+            String str;
+
+            while ((str = in.readLine()) != null) {
+                jsonString.append(str);
+            }
+        } catch (IOException e) {
+            Log.e("JSON", "Error opening asset questions.json");
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    Log.e("JSON", "Error closing asset questions.json");
+                }
+            }
+        }
+
         List<Question> qList = new ArrayList<>();
 
-        Question temp = new Question("Question 1", "What is the character to match any single character?", ".");
-        qList.add(temp);
-        temp = new Question("Question 2", "What does \"regex\" shorthand stand for?", new String[]{"Regional Expression", "Regular Expression", "Regal Experience", "Regular Exercise"}, "Regular Expression");
-        qList.add(temp);
-        temp = new Question("Question 3", "Which of the following will match a single digit number?", new String[]{"\\D", "[0-9]", "\\n", "\\d"}, new String[]{"[0-9]", "\\d"});
-        qList.add(temp);
-        temp = new Question("Question 4", "What is the syntax to capture groups?", new String[]{"(?: ...  )", "(?= ...  )", "[?: ...  ]", "(?== ...  )"}, "(?: ...  )");
-        qList.add(temp);
+        try {
+            JSONObject jsonObj = new JSONObject(jsonString.toString());
+
+            JSONArray jsonQuestions = jsonObj.getJSONArray(TAG_QUESTIONS);
+            for (int i = 0; i < jsonQuestions.length(); i++) {
+                String title;
+                String description;
+                String[] choices;
+                String[] answers;
+
+                JSONObject q = jsonQuestions.getJSONObject(i);
+
+                title = q.getString(TAG_TITLE);
+                description = q.getString(TAG_DESCRIPTION);
+                JSONArray jsonChoices = q.getJSONArray(TAG_CHOICES);
+                choices = new String[jsonChoices.length()];
+                for (int j = 0; j < jsonChoices.length(); j++) {
+                    choices[j] = jsonChoices.getString(j);
+                }
+                JSONArray jsonAnswers = q.getJSONArray(TAG_ANSWERS);
+                answers = new String[jsonAnswers.length()];
+                for (int j = 0; j < jsonAnswers.length(); j++) {
+                    answers[j] = jsonAnswers.getString(j);
+                }
+
+                Question temp = new Question(title, description, choices, answers);
+                qList.add(temp);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
         return qList;
     }
 

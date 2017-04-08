@@ -2,20 +2,113 @@
   "questions": [
     {
       "title": "Question 1",
+      "description": "What is the character to match any single character?",
+      "choices": [],
+      "answers": [
+        "."
+      ]
+    },
+    {
+      "title": "Question 2",
       "description": "What does \"regex\" shorthand stand for?",
-      "single_choices": [
-        [
-          "Regional Expressions",
-          "Regular Expressions",
-          "Regal Experience",
-          "Regular Exercise"
-        ]
-      ],
-      "multiple_choices": [
-        {}
+      "choices": [
+        "Regional Expressions",
+        "Regular Expressions",
+        "Regal Experience",
+        "Regular Exercise"
       ],
       "answers": [
         "Regular Expressions"
+      ]
+    },
+    {
+      "title": "Question 3",
+      "description": "Which of the following will match a single digit number?",
+      "choices": [
+        "\\D",
+        "[0-9]",
+        "\\n",
+        "\\d"
+      ],
+      "answers": [
+        "[0-9]",
+        "\\d"
+      ]
+    },
+    {
+      "title": "Question 4",
+      "description": "What is the syntax to capture groups?",
+      "choices": [
+        "( ...  )",
+        "(?= ...  )",
+        "[?: ...  ]",
+        "(?== ...  )"
+      ],
+      "answers": [
+        "( ...  )"
+      ]
+    },
+    {
+      "title": "Question 5",
+      "description": "Which of the below is the best syntax to match e-mail adresses?",
+      "choices": [
+        "[a-z]+@[a-Z]\\.{1}com",
+        "\\S+@\\S+\\.\\S+",
+        "[\\w\\d]+@[\\w\\d]+.[\\w]+",
+        "[0-9a-z]*@[0-9a-zA-Z]\\.[\\w]{3}"
+      ],
+      "answers": [
+        "\\S+@\\S+\\.\\S+"
+      ]
+    },
+    {
+      "title": "Question 6",
+      "description": "What is the character to match the beginning of the row?",
+      "choices": [
+        "^",
+        "(?:0)",
+        "$",
+        ":first:"
+      ],
+      "answers": [
+        "^"
+      ]
+    },
+    {
+      "title": "Question 7",
+      "description": "How can you match the following text: \"abc abc\"",
+      "choices": [
+        "abc abc",
+        "(?abc) \\1",
+        "((abc) (?:abc))",
+        "[abc ]+"
+      ],
+      "answers": [
+        "abc abc",
+        "(?abc) \\1",
+        "((abc) (?:abc))",
+        "[abc ]+"
+      ]
+    },
+    {
+      "title": "Question 8",
+      "description": "What is the character to match a new line?",
+      "choices": [],
+      "answers": [
+        "\\n"
+      ]
+    },
+    {
+      "title": "Question 9",
+      "description": "What is the pattern for positive lookbehind?",
+      "choices": [
+        "(?<= ...  )",
+        "(?= ...  )",
+        "(?! ...  )",
+        "(?<! ...  )"
+      ],
+      "answers": [
+        "(?<= ...  )"
       ]
     }
   ]
