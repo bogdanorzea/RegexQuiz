@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
                         builder.setTitle("Congratulations!");
-                        builder.setMessage(String.format("You scored %d out of %d question.", correctAnswers, progressStatus));
+                        builder.setMessage(String.format("You answered correctly %d out of %d questions.", correctAnswers, progressStatus));
 
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("Are you sure you want to reset progress?");
 
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
+                @Override
                 public void onClick(DialogInterface dialog, int which) {
                     reinitializeProgress();
                     setAdapter();
@@ -229,6 +229,24 @@ public class MainActivity extends AppCompatActivity {
 
             builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
 
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            return true;
+        }
+        if (id == R.id.action_check) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+            builder.setTitle("Progress");
+            builder.setMessage(String.format("You answered correctly %d out of %d questions.", correctAnswers, mAdapter.getItemCount()));
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

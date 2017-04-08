@@ -4,4 +4,5 @@
     <string name="check_answer">Check</string>
     <string name="answer_hint">Type answer here</string>
     <string name="reset_progress">Reset progress</string>
+    <string name="check_progress">Check progress</string>
 </resources>
