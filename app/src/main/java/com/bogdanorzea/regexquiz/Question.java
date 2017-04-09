@@ -35,32 +35,6 @@ class Question implements Serializable {
     }
 
     /**
-     * Creates an input type question
-     *
-     * @param title       Title of the question
-     * @param description Body of the question
-     * @param answer      Correct answer
-     */
-    Question(String title, String description, String answer) {
-        this(title, description);
-        mAnswers = new ArrayList<>();
-        mAnswers.add(answer);
-    }
-
-    /**
-     * Creates a single option question
-     *
-     * @param title       Title of the question
-     * @param description Body of the question
-     * @param choices     Array of possibles choices
-     * @param answer      Correct answer
-     */
-    Question(String title, String description, String[] choices, String answer) {
-        this(title, description, answer);
-        mAvailableChoices = choices.clone();
-    }
-
-    /**
      * Creates a multiple option question
      *
      * @param title       Title of the question
@@ -74,6 +48,11 @@ class Question implements Serializable {
         mAnswers = new ArrayList<>(Arrays.asList(answers));
     }
 
+    /**
+     * Checks if the question was answered
+     *
+     * @return boolean
+     */
     public boolean wasAnswered() {
         return hasAnswer;
     }
