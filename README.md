@@ -26,8 +26,6 @@ The application is a quiz with questions from the regex world.
 
 ## Screenshots
 
-![start](extras/images/1.png)
-![toast](extras/images/2.png)
-![landscape](extras/images/3.png)
-![alert](extras/images/4.png)
-![menu](extras/images/5.png)
+![start](extras/images/1.png = 320x) ![toast](extras/images/2.png = 320x)
+![landscape](extras/images/3.png = 640x)
+![alert](extras/images/4.png = 320x) ![menu](extras/images/5.png = 320x)
