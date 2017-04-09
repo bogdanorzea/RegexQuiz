@@ -5,4 +5,12 @@
     <string name="answer_hint">Type answer here</string>
     <string name="reset_progress">Reset progress</string>
     <string name="check_progress">Check progress</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="ok_button">OK</string>
+    <string name="progress">Progress</string>
+    <string name="confirm">Confirm</string>
+    <string name="reset_progress_prompt">Are you sure you want to reset progress?</string>
+    <string name="yes_button">YES</string>
+    <string name="no_button">NO</string>
+    <string name="progress_status">You answered correctly %1$d out of %2$d questions.</string>
 </resources>

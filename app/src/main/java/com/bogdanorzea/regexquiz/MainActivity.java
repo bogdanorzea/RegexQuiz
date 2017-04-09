@@ -89,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                        builder.setTitle("Congratulations!");
-                        builder.setMessage(String.format("You answered correctly %d out of %d questions.", correctAnswers, progressStatus));
+                        builder.setTitle(R.string.congratulations);
+                        builder.setMessage(String.format(getString(R.string.progress_status), correctAnswers, progressStatus));
 
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -224,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_reset) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-            builder.setTitle("Confirm");
-            builder.setMessage("Are you sure you want to reset progress?");
+            builder.setTitle(R.string.confirm);
+            builder.setMessage(R.string.reset_progress_prompt);
 
-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     reinitializeProgress();
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -254,10 +254,10 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_check) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-            builder.setTitle("Progress");
-            builder.setMessage(String.format("You answered correctly %d out of %d questions.", correctAnswers, mAdapter.getItemCount()));
+            builder.setTitle(R.string.progress);
+            builder.setMessage(String.format(getString(R.string.progress_status), correctAnswers, mAdapter.getItemCount()));
 
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
