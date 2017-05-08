@@ -1,9 +1,7 @@
 package com.bogdanorzea.regexquiz;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sets the initial values for the quiz
      */
-    private void reinitializeProgress() {
+    void reinitializeProgress() {
         progressStatus = 0;
         correctAnswers = 0;
         mAdapter = new QuestionAdapter(generateQuestions());
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sets the Adapter for the RecyclerView
      */
-    private void setAdapter() {
+    void setAdapter() {
         if (mAdapter != null) {
             progressBar.setMax(mAdapter.getItemCount());
             progressBar.setProgress(progressStatus);
@@ -87,20 +85,10 @@ public class MainActivity extends AppCompatActivity {
 
                     if (progressStatus == mAdapter.getItemCount()) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                        builder.setTitle(R.string.congratulations);
-                        builder.setMessage(String.format(getString(R.string.progress_status), correctAnswers, progressStatus));
-
-                        builder.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        AlertDialog alert = builder.create();
-                        alert.show();
+                        ProgressDialogFragment progressFragment = new ProgressDialogFragment();
+                        progressFragment.title = getString(R.string.congratulations);
+                        progressFragment.message = String.format(getString(R.string.progress_status), correctAnswers, progressStatus);
+                        progressFragment.show(getFragmentManager(), "Congratulation Fragment");
                     }
                 }
             });
@@ -222,53 +210,25 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_reset) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-            builder.setTitle(R.string.confirm);
-            builder.setMessage(R.string.reset_progress_prompt);
-
-            builder.setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    reinitializeProgress();
-                    setAdapter();
-                    mAdapter.notifyDataSetChanged();
-
-                    dialog.dismiss();
-                }
-            });
-
-            builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog alert = builder.create();
-            alert.show();
+            ConfirmDialogFragment confirmFragment = new ConfirmDialogFragment();
+            confirmFragment.title = getString(R.string.confirm);
+            confirmFragment.message = getString(R.string.reset_progress_prompt);
+            confirmFragment.show(getFragmentManager(), "Confirm Fragment");
 
             return true;
         }
         if (id == R.id.action_check) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-            builder.setTitle(R.string.progress);
-            builder.setMessage(String.format(getString(R.string.progress_status), correctAnswers, mAdapter.getItemCount()));
-
-            builder.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog alert = builder.create();
-            alert.show();
+            ProgressDialogFragment progressFragment = new ProgressDialogFragment();
+            progressFragment.title = getString(R.string.progress);
+            progressFragment.message = String.format(getString(R.string.progress_status), correctAnswers, mAdapter.getItemCount());
+            progressFragment.show(getFragmentManager(), "Progress Fragment");
 
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    void notifyDataSetChanged() {
+        mAdapter.notifyDataSetChanged();
     }
 }
