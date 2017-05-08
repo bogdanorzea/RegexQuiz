@@ -110,6 +110,19 @@
       "answers": [
         "(?<= ...  )"
       ]
+    },
+    {
+      "title": "Question 10",
+      "description": "What does the pattern '(?<=\.) {2,}(?=[A-Z])' match?",
+      "choices": [
+        "Exactly two spaces are matched, but only if they occur directly after a period (.) and before an upper case letter.",
+        "At least two spaces are matched, but only if they occur directly before a period (.) and after an upper case letter.",
+        "Exactly two spaces are matched, but only if they occur directly after a period (.) and before a lower case letter.",
+        "At least two spaces are matched, but only if they occur directly after a period (.) and before an upper case letter."
+      ],
+      "answers": [
+        "At least two spaces are matched, but only if they occur directly after a period (.) and before an upper case letter."
+      ]
     }
   ]
 }
