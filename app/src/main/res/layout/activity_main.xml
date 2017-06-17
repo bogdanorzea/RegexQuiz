@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:layout_margin="0dp"
-        android:progress="10"
+        android:progress="0"
         tools:padding="0dp" />
 
     <android.support.v7.widget.RecyclerView
